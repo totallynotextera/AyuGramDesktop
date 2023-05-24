@@ -899,8 +899,17 @@ void Updates::updateOnline(crl::time lastNonIdleTime, bool gotOtherOffline) {
 		Core::App().checkAutoLock(lastNonIdleTime);
 	});
 
+    // AyuGram sendOnlinePackets
+    const auto settings = &Core::App().settings();
 	const auto &config = _session->serverConfig();
-	bool isOnline = Core::App().hasActiveWindow(&session());
+    bool isOnlineOrig = Core::App().hasActiveWindow(&session());
+    bool isOnline = settings->sendOnlinePackets() && isOnlineOrig;
+
+    // AyuGram sendOfflinePacketAfterOnline
+    if (settings->sendOfflinePacketAfterOnline() && _lastWasOnline) {
+        isOnline = false;
+    }
+
 	int updateIn = config.onlineUpdatePeriod;
 	Assert(updateIn >= 0);
 	if (isOnline) {
@@ -922,7 +931,7 @@ void Updates::updateOnline(crl::time lastNonIdleTime, bool gotOtherOffline) {
 		|| (isOnline && gotOtherOffline)) {
 		api().request(base::take(_onlineRequest)).cancel();
 
-		_lastWasOnline = isOnline;
+		_lastWasOnline = isOnlineOrig;
 		_lastSetOnline = ms;
 		if (!Core::Quitting()) {
 			_onlineRequest = api().request(MTPaccount_UpdateStatus(
@@ -943,7 +952,7 @@ void Updates::updateOnline(crl::time lastNonIdleTime, bool gotOtherOffline) {
 		session().changes().peerUpdated(
 			self,
 			Data::PeerUpdate::Flag::OnlineStatus);
-		if (!isOnline) { // Went offline, so we need to save message draft to the cloud.
+		if (!isOnlineOrig) { // Went offline, so we need to save message draft to the cloud.
 			api().saveCurrentDraftToCloud();
 			session().data().maybeStopWatchForOffline(self);
 		}
@@ -953,6 +962,22 @@ void Updates::updateOnline(crl::time lastNonIdleTime, bool gotOtherOffline) {
 		updateIn = qMin(updateIn, int(_lastSetOnline + config.onlineUpdatePeriod - ms));
 		Assert(updateIn >= 0);
 	}
+
+    // AyuGram sendOfflinePacketAfterOnline
+    if (settings->sendOfflinePacketAfterOnline()) {
+        session().api().requestFullPeer(session().user());
+        if (session().user()->onlineTill > base::unixtime::now()) {
+            DEBUG_LOG(("[AyuGram] User likely appeared online"));
+
+            _onlineRequest = api().request(MTPaccount_UpdateStatus(
+                    MTP_bool(true)
+            )).send();
+        }
+
+        DEBUG_LOG(("[AyuGram] Decreasing updateIn because of enabled features"));
+        updateIn = 1250;
+    }
+
 	_onlineTimer.callOnce(updateIn);
 }
 
