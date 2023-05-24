@@ -58,9 +58,11 @@ std::optional<QString> OnlineTextSpecial(not_null<UserData*> user) {
 		return tr::lng_status_support(tr::now);
 	} else if (user->isBot()) {
 		auto seesAllMessages = (user->botInfo->readsAllHistory);
-		return seesAllMessages
-				? tr::lng_status_bot_reads_all(tr::now)
-				: tr::lng_status_bot_not_reads_all(tr::now);
+		const auto s = seesAllMessages
+                       ? tr::lng_status_bot_reads_all(tr::now)
+                       : tr::lng_status_bot_not_reads_all(tr::now);
+
+        return tr::lng_status_bot(tr::now) + " (" + s + ")";
 	} else if (user->isServiceUser()) {
 		return tr::lng_status_support(tr::now);
 	}
