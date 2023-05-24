@@ -24,6 +24,11 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "core/application.h"
 #include "apiwrap.h"
 
+
+// AyuGram includes
+#include "core/core_settings.h"
+
+
 namespace Data {
 namespace {
 
@@ -178,6 +183,13 @@ void Histories::readInboxTill(
 	});
 
 	Core::App().notifications().clearIncomingFromHistory(history);
+
+    // AyuGram sendReadPackets
+    const auto settings = &Core::App().settings();
+    if (!settings->sendReadPackets()) {
+        DEBUG_LOG(("[AyuGram] Don't read messages"));
+        return;
+    }
 
 	const auto needsRequest = history->readInboxTillNeedsRequest(tillId);
 	if (!needsRequest && !force) {

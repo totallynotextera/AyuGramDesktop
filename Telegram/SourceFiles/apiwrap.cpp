@@ -1297,6 +1297,14 @@ void ApiWrap::markContentsRead(
 			markedIds.push_back(MTP_int(item->id));
 		}
 	}
+
+    // AyuGram sendReadPackets
+    const auto settings = &Core::App().settings();
+    if (!settings->sendReadPackets()) {
+        DEBUG_LOG(("[AyuGram] Don't read contents"));
+        return;
+    }
+
 	if (!markedIds.isEmpty()) {
 		request(MTPmessages_ReadMessageContents(
 			MTP_vector<MTPint>(markedIds)
@@ -1316,6 +1324,14 @@ void ApiWrap::markContentsRead(not_null<HistoryItem*> item) {
 	if (!item->markContentsRead(true) || !item->isRegular()) {
 		return;
 	}
+
+    // AyuGram sendReadPackets
+    const auto settings = &Core::App().settings();
+    if (!settings->sendReadPackets()) {
+        DEBUG_LOG(("[AyuGram] Don't read contents"));
+        return;
+    }
+
 	const auto ids = MTP_vector<MTPint>(1, MTP_int(item->id));
 	if (const auto channel = item->history()->peer->asChannel()) {
 		request(MTPchannels_ReadMessageContents(
