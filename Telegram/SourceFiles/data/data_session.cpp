@@ -484,6 +484,8 @@ not_null<UserData*> Session::processUser(const MTPUser &data) {
 	using UpdateFlag = PeerUpdate::Flag;
 	auto flags = UpdateFlag::None | UpdateFlag::None;
 	data.match([&](const MTPDuserEmpty &data) {
+        return;
+
 		const auto canShareThisContact = result->canShareThisContactFast();
 
 		result->input = MTP_inputPeerUser(data.vid(), MTP_long(0));
@@ -567,7 +569,7 @@ not_null<UserData*> Session::processUser(const MTPUser &data) {
 				result->restriction_reason = "";
 			}
 		}
-		if (data.is_deleted()) {
+		if (data.is_deleted() && false) {
 			if (!result->phone().isEmpty()) {
 				result->setPhone(QString());
 				flags |= UpdateFlag::PhoneNumber;
@@ -786,7 +788,7 @@ not_null<PeerData*> Session::processChat(const MTPChat &data) {
 					&& chat->groupCall()->fullCount() > 0))
 				? Flag::CallNotEmpty
 				: Flag())
-			| (data.is_noforwards() ? Flag::NoForwards : Flag());
+			| (false ? Flag::NoForwards : Flag());
 		chat->setFlags((chat->flags() & ~flagsMask) | flagsSet);
 		chat->count = data.vparticipants_count().v;
 
@@ -794,6 +796,8 @@ not_null<PeerData*> Session::processChat(const MTPChat &data) {
 			flags |= UpdateFlag::Rights;
 		}
 	}, [&](const MTPDchatForbidden &data) {
+        return;
+
 		const auto chat = result->asChat();
 
 		const auto canAddMembers = chat->canAddMembers();
@@ -921,7 +925,7 @@ not_null<PeerData*> Session::processChat(const MTPChat &data) {
 				? (data.is_left() ? Flag::Left : Flag())
 				| (data.is_creator() ? Flag::Creator : Flag())
 				: Flag())
-			| (data.is_noforwards() ? Flag::NoForwards : Flag())
+			| (false ? Flag::NoForwards : Flag())
 			| (data.is_join_to_send() ? Flag::JoinToWrite : Flag())
 			| (data.is_join_request() ? Flag::RequestToJoin : Flag())
 			| ((data.is_forum() && data.is_megagroup())
@@ -943,6 +947,8 @@ not_null<PeerData*> Session::processChat(const MTPChat &data) {
 			flags |= UpdateFlag::GroupCall;
 		}
 	}, [&](const MTPDchannelForbidden &data) {
+        return;
+
 		const auto channel = result->asChannel();
 
 		auto wasInChannel = channel->amIn();
