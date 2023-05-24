@@ -128,50 +128,6 @@ public:
 		return _proxy;
 	}
 
-    // AyuGram settings
-    void setSendReadPackets(bool value) {
-        _sendReadPackets = value;
-    }
-    [[nodiscard]] bool sendReadPackets() const {
-        return _sendReadPackets;
-    }
-    void setSendOnlinePackets(bool value) {
-        _sendOnlinePackets = value;
-    }
-    [[nodiscard]] bool sendOnlinePackets() const {
-        return _sendOnlinePackets;
-    }
-    void setSendOfflinePacketAfterOnline(bool value) {
-        _sendOfflinePacketAfterOnline = value;
-    }
-    [[nodiscard]] bool sendOfflinePacketAfterOnline() const {
-        return _sendOfflinePacketAfterOnline;
-    }
-    void setSendUploadProgress(bool value) {
-        _sendUploadProgress = value;
-    }
-    [[nodiscard]] bool sendUploadProgress() const {
-        return _sendUploadProgress;
-    }
-    void setUseScheduledMessages(bool value) {
-        _useScheduledMessages = value;
-    }
-    [[nodiscard]] bool useScheduledMessages() const {
-        return _useScheduledMessages;
-    }
-    void setKeepDeletedMessages(bool value) {
-        _keepDeletedMessages = value;
-    }
-    [[nodiscard]] bool keepDeletedMessages() const {
-        return _keepDeletedMessages;
-    }
-    void setKeepMessagesHistory(bool value) {
-        _keepMessagesHistory = value;
-    }
-    [[nodiscard]] bool keepMessagesHistory() const {
-        return _keepMessagesHistory;
-    }
-
 	[[nodiscard]] static bool IsLeftCorner(ScreenCorner corner) {
 		return (corner == ScreenCorner::TopLeft)
 			|| (corner == ScreenCorner::BottomLeft);
@@ -873,15 +829,6 @@ private:
 	};
 
 	SettingsProxy _proxy;
-
-    // AyuGram settings
-    bool _sendReadPackets = true;
-    bool _sendOnlinePackets = true;
-    bool _sendOfflinePacketAfterOnline = false;
-    bool _sendUploadProgress = true;
-    bool _useScheduledMessages = false;
-    bool _keepDeletedMessages = false;
-    bool _keepMessagesHistory = false;
 
 	rpl::variable<bool> _adaptiveForWide = true;
 	bool _moderateModeEnabled = false;

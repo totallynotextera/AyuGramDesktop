@@ -98,6 +98,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "storage/storage_media_prepare.h"
 #include "storage/storage_account.h"
 
+#include "ayu/ayu_settings.h"
+
 namespace {
 
 // Save draft to the cloud with 1 sec extra delay.
@@ -1299,8 +1301,8 @@ void ApiWrap::markContentsRead(
 	}
 
     // AyuGram sendReadPackets
-    const auto settings = &Core::App().settings();
-    if (!settings->sendReadPackets()) {
+    const auto settings = &AyuSettings::getInstance();
+    if (!settings->sendReadPackets) {
         DEBUG_LOG(("[AyuGram] Don't read contents"));
         return;
     }
@@ -1326,8 +1328,8 @@ void ApiWrap::markContentsRead(not_null<HistoryItem*> item) {
 	}
 
     // AyuGram sendReadPackets
-    const auto settings = &Core::App().settings();
-    if (!settings->sendReadPackets()) {
+    const auto settings = &AyuSettings::getInstance();
+    if (!settings->sendReadPackets) {
         DEBUG_LOG(("[AyuGram] Don't read contents"));
         return;
     }
@@ -3503,8 +3505,8 @@ void ApiWrap::sendUploadedPhoto(
 		Api::SendOptions options) {
 	if (const auto item = _session->data().message(localId)) {
         // AyuGram useScheduledMessages
-        const auto settings = &Core::App().settings();
-        if (settings->useScheduledMessages() && !options.scheduled) {
+        const auto settings = &AyuSettings::getInstance();
+        if (settings->useScheduledMessages && !options.scheduled) {
             DEBUG_LOG(("[AyuGram] Scheduling message"));
             auto current = base::unixtime::now();
             options.scheduled = current + 18; // using 18 seconds because photo can be big
@@ -3529,8 +3531,8 @@ void ApiWrap::sendUploadedDocument(
 		}
 
         // AyuGram useScheduledMessages
-        const auto settings = &Core::App().settings();
-        if (settings->useScheduledMessages() && !options.scheduled) {
+        const auto settings = &AyuSettings::getInstance();
+        if (settings->useScheduledMessages && !options.scheduled) {
             DEBUG_LOG(("[AyuGram] Scheduling message"));
             auto current = base::unixtime::now();
             options.scheduled = current + 60; // well, document can be really big...
@@ -3948,8 +3950,8 @@ void ApiWrap::sendMediaWithRandomId(
 		Api::SendOptions options,
 		uint64 randomId) {
     // AyuGram useScheduledMessages
-    const auto settings = &Core::App().settings();
-    if (settings->useScheduledMessages() && !options.scheduled) {
+    const auto settings = &AyuSettings::getInstance();
+    if (settings->useScheduledMessages && !options.scheduled) {
         DEBUG_LOG(("[AyuGram] Scheduling message"));
         auto current = base::unixtime::now();
         options.scheduled = current + 12;
@@ -4049,8 +4051,8 @@ void ApiWrap::sendAlbumIfReady(not_null<SendingAlbum*> album) {
 	}
 
     // AyuGram useScheduledMessages
-    const auto settings = &Core::App().settings();
-    if (settings->useScheduledMessages() && !album->options.scheduled) {
+    const auto settings = &AyuSettings::getInstance();
+    if (settings->useScheduledMessages && !album->options.scheduled) {
         DEBUG_LOG(("[AyuGram] Scheduling message"));
         auto current = base::unixtime::now();
         album->options.scheduled = current + 12;

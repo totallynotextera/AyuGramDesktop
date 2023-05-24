@@ -17,6 +17,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "settings/settings_folders.h"
 #include "settings/settings_calls.h"
 #include "settings/settings_enhanced.h"
+#include "settings/settings_ayu.h"
 #include "settings/settings_power_saving.h"
 #include "settings/settings_premium.h"
 #include "settings/settings_scale_preview.h"
@@ -403,6 +404,10 @@ void SetupSections(
 		tr::lng_settings_enhanced(),
 		Enhanced::Id(),
 		{ &st::settingsIconGeneral, kIconRed });
+    addSection(
+        rpl::single(QString("AyuGram Settings")),
+        Ayu::Id(),
+        { &st::settingsPremiumIconStar, kIconPurple });
 
 	SetupPowerSavingButton(&controller->window(), container);
 	SetupLanguageButton(&controller->window(), container);

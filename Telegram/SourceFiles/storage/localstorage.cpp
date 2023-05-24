@@ -36,6 +36,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonArray>
 #include <QtCore/QJsonValue>
+#include "ayu/ayu_settings.h"
 
 #ifndef Q_OS_WIN
 #include <unistd.h>
@@ -443,6 +444,8 @@ void writeSettings() {
 		LOG(("App Error: _basePath is empty in writeSettings()"));
 		return;
 	}
+
+    AyuSettings::save();
 
 	if (!QDir().exists(_basePath)) QDir().mkpath(_basePath);
 

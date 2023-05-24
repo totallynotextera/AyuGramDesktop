@@ -80,6 +80,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "base/random.h"
 #include "styles/style_boxes.h" // st::backgroundSize
 
+#include "ayu/ayu_settings.h"
+
 namespace Data {
 namespace {
 
@@ -2180,14 +2182,14 @@ void Session::updateEditedMessage(const MTPMessage &data) {
 	}
 
     // AyuGram keepMessagesHistory
-    const auto settings = &Core::App().settings();
+    const auto settings = &AyuSettings::getInstance();
     HistoryMessageEdition edit;
 
     if (data.type() != mtpc_message) {
         goto proceed;
     }
     edit = HistoryMessageEdition(_session, data.c_message());
-    if (settings->keepMessagesHistory() && !existing->isLocal() && !existing->author()->isSelf() && !edit.isEditHide) {
+    if (settings->keepMessagesHistory && !existing->isLocal() && !existing->author()->isSelf() && !edit.isEditHide) {
         const auto history = existing->history();
         const auto msg = existing->originalText();
 

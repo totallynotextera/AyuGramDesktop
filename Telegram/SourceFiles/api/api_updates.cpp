@@ -57,6 +57,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "apiwrap.h"
 #include "ui/text/format_values.h" // Ui::FormatPhone
 
+#include "ayu/ayu_settings.h"
+
 namespace Api {
 namespace {
 
@@ -900,13 +902,13 @@ void Updates::updateOnline(crl::time lastNonIdleTime, bool gotOtherOffline) {
 	});
 
     // AyuGram sendOnlinePackets
-    const auto settings = &Core::App().settings();
+    const auto settings = &AyuSettings::getInstance();
 	const auto &config = _session->serverConfig();
     bool isOnlineOrig = Core::App().hasActiveWindow(&session());
-    bool isOnline = settings->sendOnlinePackets() && isOnlineOrig;
+    bool isOnline = settings->sendOnlinePackets && isOnlineOrig;
 
     // AyuGram sendOfflinePacketAfterOnline
-    if (settings->sendOfflinePacketAfterOnline() && _lastWasOnline) {
+    if (settings->sendOfflinePacketAfterOnline && _lastWasOnline) {
         isOnline = false;
     }
 
@@ -964,7 +966,7 @@ void Updates::updateOnline(crl::time lastNonIdleTime, bool gotOtherOffline) {
 	}
 
     // AyuGram sendOfflinePacketAfterOnline
-    if (settings->sendOfflinePacketAfterOnline()) {
+    if (settings->sendOfflinePacketAfterOnline) {
         session().api().requestFullPeer(session().user());
         if (session().user()->onlineTill > base::unixtime::now()) {
             DEBUG_LOG(("[AyuGram] User likely appeared online"));

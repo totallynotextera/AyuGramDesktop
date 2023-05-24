@@ -80,6 +80,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 // AyuGram includes
 #include "history/history.h"
 #include "data/data_histories.h"
+#include "ayu/ayu_settings.h"
 
 
 namespace Window {
@@ -776,27 +777,27 @@ void MainMenu::setupMenu() {
                 rpl::single(QString("LRead Messages")),
                 { &st::settingsIconForward, kIconPurple }
         )->setClickedCallback([=] {
-            const auto settings = &Core::App().settings();
-            const auto prev = settings->sendReadPackets();
-            settings->setSendReadPackets(false);
+            auto settings = &AyuSettings::getInstance();
+            auto prev = settings->sendReadPackets;
+            settings->sendReadPackets = false;
 
             auto chats = controller->session().data().chatsList();
             MarkAsReadChatListHack(chats);
 
-            settings->setSendReadPackets(prev);
+            settings->sendReadPackets = prev;
         });
         addAction(
                 rpl::single(QString("SRead Messages")),
                 { &st::settingsIconForward, kIconPurple }
         )->setClickedCallback([=] {
-            const auto settings = &Core::App().settings();
-            const auto prev = settings->sendReadPackets();
-            settings->setSendReadPackets(true);
+            auto settings = &AyuSettings::getInstance();
+            auto prev = settings->sendReadPackets;
+            settings->sendReadPackets = true;
 
             auto chats = controller->session().data().chatsList();
             MarkAsReadChatListHack(chats);
 
-            settings->setSendReadPackets(prev);
+            settings->sendReadPackets = prev;
         });
 	} else {
 		addAction(

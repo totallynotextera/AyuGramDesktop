@@ -27,6 +27,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 
 // AyuGram includes
 #include "core/core_settings.h"
+#include "ayu/ayu_settings.h"
 
 
 namespace Data {
@@ -185,8 +186,8 @@ void Histories::readInboxTill(
 	Core::App().notifications().clearIncomingFromHistory(history);
 
     // AyuGram sendReadPackets
-    const auto settings = &Core::App().settings();
-    if (!settings->sendReadPackets()) {
+    const auto settings = &AyuSettings::getInstance();
+    if (!settings->sendReadPackets) {
         DEBUG_LOG(("[AyuGram] Don't read messages"));
         return;
     }

@@ -63,6 +63,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "base/qt/qt_common_adapters.h"
 #include "styles/style_dialogs.h"
 
+#include "ayu/ayu_settings.h"
+
 namespace {
 
 constexpr auto kNewBlockEachMessage = 50;
@@ -478,8 +480,8 @@ void History::destroyMessage(not_null<HistoryItem*> item) {
 	Expects(item->isHistoryEntry() || !item->mainView());
 
     // AyuGram keepDeletedMessages
-    const auto settings = &Core::App().settings();
-    if (settings->keepDeletedMessages() && item->isRegular() && !item->isGroupMigrate()) {
+    const auto settings = &AyuSettings::getInstance();
+    if (settings->keepDeletedMessages && item->isRegular() && !item->isGroupMigrate()) {
         if (!item->isService()) {
             item->setPostAuthor("🧹"_q);
         } else {

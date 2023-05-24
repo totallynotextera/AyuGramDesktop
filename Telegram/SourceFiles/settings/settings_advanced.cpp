@@ -870,115 +870,6 @@ void SetupSystemIntegration(
 	AddSkip(container);
 }
 
-void SetupAyuGramSettings(not_null<Ui::VerticalLayout*> container) {
-    // setup AyuGram options
-    const auto settings = &Core::App().settings();
-
-    AddDivider(container);
-    AddSkip(container);
-    AddSubsectionTitle(container, rpl::single(QString("AyuGram settings")));
-
-    AddButton(
-            container,
-            rpl::single(QString("Send read packets")),
-            st::settingsButtonNoIcon
-    )->toggleOn(
-            rpl::single(settings->sendReadPackets())
-    )->toggledValue(
-    ) | rpl::filter([=](bool enabled) {
-        return (enabled != settings->sendReadPackets());
-    }) | rpl::start_with_next([=](bool enabled) {
-        settings->setSendReadPackets(enabled);
-        Local::writeSettings();
-    }, container->lifetime());
-
-    AddButton(
-            container,
-            rpl::single(QString("Send online packets")),
-            st::settingsButtonNoIcon
-    )->toggleOn(
-            rpl::single(settings->sendOnlinePackets())
-    )->toggledValue(
-    ) | rpl::filter([=](bool enabled) {
-        return (enabled != settings->sendOnlinePackets());
-    }) | rpl::start_with_next([=](bool enabled) {
-        settings->setSendOnlinePackets(enabled);
-        Local::writeSettings();
-    }, container->lifetime());
-
-    AddButton(
-            container,
-            rpl::single(QString("Send offline packet after online")),
-            st::settingsButtonNoIcon
-    )->toggleOn(
-            rpl::single(settings->sendOfflinePacketAfterOnline())
-    )->toggledValue(
-    ) | rpl::filter([=](bool enabled) {
-        return (enabled != settings->sendOfflinePacketAfterOnline());
-    }) | rpl::start_with_next([=](bool enabled) {
-        settings->setSendOfflinePacketAfterOnline(enabled);
-        Local::writeSettings();
-    }, container->lifetime());
-
-    AddButton(
-            container,
-            rpl::single(QString("Send typing & upload progress")),
-            st::settingsButtonNoIcon
-    )->toggleOn(
-            rpl::single(settings->sendUploadProgress())
-    )->toggledValue(
-    ) | rpl::filter([=](bool enabled) {
-        return (enabled != settings->sendUploadProgress());
-    }) | rpl::start_with_next([=](bool enabled) {
-        settings->setSendUploadProgress(enabled);
-        Local::writeSettings();
-    }, container->lifetime());
-
-    AddButton(
-            container,
-            rpl::single(QString("Use scheduled messages to keep offline")),
-            st::settingsButtonNoIcon
-    )->toggleOn(
-            rpl::single(settings->useScheduledMessages())
-    )->toggledValue(
-    ) | rpl::filter([=](bool enabled) {
-        return (enabled != settings->useScheduledMessages());
-    }) | rpl::start_with_next([=](bool enabled) {
-        settings->setUseScheduledMessages(enabled);
-        Local::writeSettings();
-    }, container->lifetime());
-
-    AddButton(
-            container,
-            rpl::single(QString("Keep deleted messages")),
-            st::settingsButtonNoIcon
-    )->toggleOn(
-            rpl::single(settings->keepDeletedMessages())
-    )->toggledValue(
-    ) | rpl::filter([=](bool enabled) {
-        return (enabled != settings->keepDeletedMessages());
-    }) | rpl::start_with_next([=](bool enabled) {
-        settings->setKeepDeletedMessages(enabled);
-        Local::writeSettings();
-    }, container->lifetime());
-
-    AddButton(
-            container,
-            rpl::single(QString("Keep messages' history")),
-            st::settingsButtonNoIcon
-    )->toggleOn(
-            rpl::single(settings->keepMessagesHistory())
-    )->toggledValue(
-    ) | rpl::filter([=](bool enabled) {
-        return (enabled != settings->keepMessagesHistory());
-    }) | rpl::start_with_next([=](bool enabled) {
-        settings->setKeepMessagesHistory(enabled);
-        Local::writeSettings();
-    }, container->lifetime());
-
-    AddDividerText(container, rpl::single(QString("AyuGram developed and maintained by ZavaruKitsu")));
-}
-
 Advanced::Advanced(
 	QWidget *parent,
 	not_null<Window::SessionController*> controller)
@@ -1040,16 +931,13 @@ void Advanced::setupContent(not_null<Window::SessionController*> controller) {
 		AddSkip(content);
 	}
 
-    SetupAyuGramSettings(content);
-
     // AyuGram: auto updates are not supported
     //	if (cAutoUpdate()) {
     //		addUpdate();
     //	}
 	//if (!HasUpdate()) {
-        // AyuGram: fix settings view
-        //		AddSkip(content);
-        //		AddDivider(content);
+        AddSkip(content);
+        AddDivider(content);
 		AddSkip(content);
 		content->add(
 			CreateButton(

@@ -174,6 +174,8 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtGui/QWindow>
 #include <QtCore/QMimeData>
 
+#include "ayu/ayu_settings.h"
+
 namespace {
 
 constexpr auto kMessagesPerPageFirst = 30;
@@ -3910,8 +3912,8 @@ Api::SendAction HistoryWidget::prepareSendAction(
 
 void HistoryWidget::send(Api::SendOptions options) {
     // AyuGram useScheduledMessages
-    const auto settings = &Core::App().settings();
-    if (settings->useScheduledMessages() && !options.scheduled) {
+    const auto settings = &AyuSettings::getInstance();
+    if (settings->useScheduledMessages && !options.scheduled) {
         DEBUG_LOG(("[AyuGram] Scheduling message"));
         auto current = base::unixtime::now();
         options.scheduled = current + 12;

@@ -19,6 +19,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 // AyuGram includes
 #include "core/application.h"
 #include "core/core_settings.h"
+#include "ayu/ayu_settings.h"
 
 
 namespace Api {
@@ -120,8 +121,8 @@ void SendProgressManager::send(const Key &key, int progress) {
 	}
 
     // AyuGram sendUploadProgress
-    const auto settings = &Core::App().settings();
-    if (!settings->sendUploadProgress()) {
+    const auto settings = &AyuSettings::getInstance();
+    if (!settings->sendUploadProgress) {
         DEBUG_LOG(("[AyuGram] Don't send upload progress"));
         return;
     }

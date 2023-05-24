@@ -71,6 +71,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 
 // AyuGram includes
 #include "base/unixtime.h"
+#include "ayu/ayu_settings.h"
 
 
 namespace {
@@ -1343,8 +1344,8 @@ void SendFilesBox::send(
 		Api::SendOptions options,
 		bool ctrlShiftEnter) {
     // AyuGram useScheduledMessages
-    const auto settings = &Core::App().settings();
-    if (settings->useScheduledMessages() && !options.scheduled) {
+    const auto settings = &AyuSettings::getInstance();
+    if (settings->useScheduledMessages && !options.scheduled) {
         DEBUG_LOG(("[AyuGram] Scheduling files"));
         auto current = base::unixtime::now();
         options.scheduled = current + 60; // well, files can be really big...
