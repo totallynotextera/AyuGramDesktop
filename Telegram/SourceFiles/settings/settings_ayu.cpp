@@ -1,14 +1,12 @@
-#include <mainwindow.h>
+#include "boxes/ayu/edit_deleted_mark.h"
 #include "ayu/ayu_settings.h"
 #include "settings/settings_ayu.h"
 
+#include "mainwindow.h"
 #include "settings/settings_common.h"
 #include "ui/wrap/vertical_layout.h"
 #include "ui/widgets/buttons.h"
-#include "ui/widgets/labels.h"
 #include "ui/widgets/checkbox.h"
-#include "ui/widgets/continuous_sliders.h"
-#include "ui/text/text_utilities.h" // Ui::Text::ToUpper
 #include "boxes/connection_box.h"
 #include "ui/boxes/confirm_box.h"
 #include "platform/platform_specific.h"
@@ -18,7 +16,6 @@
 #include "storage/localstorage.h"
 #include "data/data_session.h"
 #include "main/main_session.h"
-#include "layout/layout_item_base.h"
 #include "styles/style_settings.h"
 #include "apiwrap.h"
 #include "api/api_blocked_peers.h"
@@ -36,7 +33,8 @@ namespace Settings {
         setupContent(controller);
     }
 
-    void Ayu::SetupAyuGramSettings(not_null<Ui::VerticalLayout *> container) {
+    void Ayu::SetupAyuGramSettings(not_null<Ui::VerticalLayout *> container,
+                                   not_null<Window::SessionController *> controller) {
         auto settings = &AyuSettings::getInstance();
 
         AddSubsectionTitle(container, rpl::single(QString("General")));
@@ -139,13 +137,31 @@ namespace Settings {
             Local::writeSettings();
         }, container->lifetime());
 
+        auto currentDeletedMark = lifetime().make_state<rpl::variable<QString>>();
+
+        auto btn = AddButtonWithLabel(
+                container,
+                rpl::single(QString("Deleted Mark")),
+                currentDeletedMark->changes(),
+                st::settingsButtonNoIcon
+        );
+        btn->addClickHandler([=]() {
+            auto box = Box<EditDeletedMarkBox>();
+            box->boxClosing() | rpl::start_with_next([=]() {
+                *currentDeletedMark = settings->deletedMark;
+            }, container->lifetime());
+
+            Ui::show(std::move(box));
+        });
+        *currentDeletedMark = settings->deletedMark;
+
         AddDividerText(container, rpl::single(QString("AyuGram developed and maintained by Radolyn Labs")));
     }
 
     void Ayu::setupContent(not_null<Window::SessionController *> controller) {
         const auto content = Ui::CreateChild<Ui::VerticalLayout>(this);
 
-        SetupAyuGramSettings(content);
+        SetupAyuGramSettings(content, controller);
 
         Ui::ResizeFitChild(this, content);
     }

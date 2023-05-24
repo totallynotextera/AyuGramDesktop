@@ -100,6 +100,8 @@ PRIVATE
     ayu/qserializer.h
     settings/settings_ayu.cpp
     settings/settings_ayu.h
+    boxes/ayu/edit_deleted_mark.cpp
+    boxes/ayu/edit_deleted_mark.h
 
     api/api_attached_stickers.cpp
     api/api_attached_stickers.h

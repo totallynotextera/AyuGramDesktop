@@ -2,6 +2,7 @@
 
 namespace AyuSettings {
     const QString filename = "ayu_settings.json";
+    const int latestMigration = 1;
     AyuGramSettings settings;
 
     AyuGramSettings &getInstance() {
@@ -21,6 +22,7 @@ namespace AyuSettings {
     }
 
     void save() {
+        settings.migrationVersion = latestMigration;
         QByteArray json = settings.toRawJson();
 
         QFile file(filename);

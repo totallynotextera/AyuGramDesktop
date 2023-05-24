@@ -20,6 +20,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "calls/group/calls_group_common.h"
 #include "spellcheck/spellcheck_types.h"
 
+#include "storage/localstorage.h"
 #include "ayu/ayu_settings.h"
 
 namespace Core {
@@ -449,7 +450,8 @@ void Settings::addFromSerialized(const QByteArray &serialized) {
 	quint64 macRoundIconDigest = _macRoundIconDigest.value_or(0);
 
     auto ayuSettings = &AyuSettings::getInstance();
-    if (ayuSettings->migrationVersion == 0) {
+    auto resave = ayuSettings->migrationVersion == 0;
+    if (resave) {
         stream
                 >> empty
                 >> empty
@@ -893,6 +895,10 @@ void Settings::addFromSerialized(const QByteArray &serialized) {
 	}
 	_ignoreBatterySaving = (ignoreBatterySaving == 1);
 	_macRoundIconDigest = macRoundIconDigest ? macRoundIconDigest : std::optional<uint64>();
+
+    if (resave) {
+        Local::writeSettings();
+    }
 }
 
 QString Settings::getSoundPath(const QString &key) const {

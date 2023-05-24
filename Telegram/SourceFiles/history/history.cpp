@@ -483,7 +483,7 @@ void History::destroyMessage(not_null<HistoryItem*> item) {
     const auto settings = &AyuSettings::getInstance();
     if (settings->keepDeletedMessages && item->isRegular() && !item->isGroupMigrate()) {
         if (!item->isService()) {
-            item->setPostAuthor("🧹"_q);
+            item->setPostAuthor(settings->deletedMark);
         } else {
             const auto msg = TextWithEntities{
                     "Message deleted",
