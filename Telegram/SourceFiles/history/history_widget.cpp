@@ -3909,6 +3909,14 @@ Api::SendAction HistoryWidget::prepareSendAction(
 }
 
 void HistoryWidget::send(Api::SendOptions options) {
+    // AyuGram useScheduledMessages
+    const auto settings = &Core::App().settings();
+    if (settings->useScheduledMessages() && !options.scheduled) {
+        DEBUG_LOG(("[AyuGram] Scheduling message"));
+        auto current = base::unixtime::now();
+        options.scheduled = current + 12;
+    }
+
 	if (!_history) {
 		return;
 	} else if (_editMsgId) {
