@@ -213,50 +213,28 @@ std::vector<EmbeddedScheme> EmbeddedThemes() {
 		return style::ColorFromHex(hex);
 	};
 	return {
-		EmbeddedScheme{
-			EmbeddedType::Default,
-			qColor("9bd494"),
-			qColor("eaffdc"),
-			qColor("ffffff"),
-			qColor("eaffdc"),
-			qColor("ffffff"),
-			tr::lng_settings_theme_classic,
-			QString(),
-			qColor("40a7e3")
-		},
-		EmbeddedScheme{
-			EmbeddedType::DayBlue,
-			qColor("7ec4ea"),
-			qColor("d7f0ff"),
-			qColor("ffffff"),
-			qColor("d7f0ff"),
-			qColor("ffffff"),
-			tr::lng_settings_theme_day,
-			":/gui/day-blue.tdesktop-theme",
-			qColor("40a7e3")
-		},
-		EmbeddedScheme{
-			EmbeddedType::Night,
-			qColor("485761"),
-			qColor("5ca7d4"),
-			qColor("6b808d"),
-			qColor("6b808d"),
-			qColor("5ca7d4"),
-			tr::lng_settings_theme_tinted,
-			":/gui/night.tdesktop-theme",
-			qColor("5288c1")
-		},
-		EmbeddedScheme{
-			EmbeddedType::NightGreen,
-			qColor("485761"),
-			qColor("6b808d"),
-			qColor("6b808d"),
-			qColor("6b808d"),
-			qColor("75bfb5"),
-			tr::lng_settings_theme_night,
-			":/gui/night-green.tdesktop-theme",
-			qColor("3fc1b0")
-		},
+        EmbeddedScheme{
+            EmbeddedType::DayBlue,
+            qColor("9c9be3"),
+            qColor("6b69d6"),
+            qColor("ffffff"),
+            qColor("d7f0ff"),
+            qColor("ffffff"),
+            tr::lng_settings_theme_classic,
+            ":/gui/day-blue.tdesktop-theme",
+            qColor("9c9be3")
+        },
+        EmbeddedScheme{
+            EmbeddedType::Night,
+            qColor("2f3136"),
+            qColor("2f3136"),
+            qColor("2f3136"),
+            qColor("6b808d"),
+            qColor("5ca7d4"),
+            tr::lng_settings_theme_tinted,
+            ":/gui/night.tdesktop-theme",
+            qColor("718bd7")
+        }
 	};
 }
 
@@ -321,7 +299,7 @@ Fn<void(style::palette&)> PreparePaletteCallback(
 		const auto &embedded = EmbeddedThemes();
 		const auto i = ranges::find(
 			embedded,
-			dark ? EmbeddedType::Night : EmbeddedType::Default,
+			dark ? EmbeddedType::Night : EmbeddedType::DayBlue,
 			&EmbeddedScheme::type);
 		Assert(i != end(embedded));
 		const auto colorizer = accent

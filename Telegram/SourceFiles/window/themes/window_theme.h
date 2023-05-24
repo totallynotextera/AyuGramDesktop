@@ -210,6 +210,11 @@ public:
 	[[nodiscard]] std::optional<QColor> imageMonoColor() const;
 	[[nodiscard]] bool nightModeChangeAllowed() const;
 
+    // AyuGram: make public
+    void reapplyWithNightMode(
+            std::optional<QString> themePath,
+            bool newNightMode);
+
 private:
 	struct AdjustableColor {
 		AdjustableColor(style::color data);
@@ -236,9 +241,6 @@ private:
 	void setNightModeValue(bool nightMode);
 	[[nodiscard]] bool nightMode() const;
 	void toggleNightMode(std::optional<QString> themePath);
-	void reapplyWithNightMode(
-		std::optional<QString> themePath,
-		bool newNightMode);
 	void keepApplied(const Object &object, bool write);
 	[[nodiscard]] bool isNonDefaultThemeOrBackground();
 	[[nodiscard]] bool isNonDefaultBackground();
