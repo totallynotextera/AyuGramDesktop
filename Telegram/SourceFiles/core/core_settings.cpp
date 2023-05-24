@@ -202,11 +202,33 @@ QByteArray Settings::serialize() const {
 		+ sizeof(qint32)
 		+ sizeof(quint64);
 
+    // AyuGram settings
+    size += sizeof(quint32) * 12;
+
 	auto result = QByteArray();
 	result.reserve(size);
 	{
 		QDataStream stream(&result, QIODevice::WriteOnly);
 		stream.setVersion(QDataStream::Qt_5_1);
+
+        // AyuGram settings
+        // note: they're at the start because Telegram adds new options
+        // and this patch may fail
+        stream
+            << quint32(_sendReadPackets)
+            << quint32(_sendOnlinePackets)
+            << quint32(_sendOfflinePacketAfterOnline)
+            << quint32(_sendUploadProgress)
+            << quint32(_useScheduledMessages)
+            << quint32(_keepDeletedMessages)
+            << quint32(_keepMessagesHistory)
+            // reserved for future use
+            << quint32(0)
+            << quint32(0)
+            << quint32(0)
+            << quint32(0)
+            << quint32(0);
+
 		stream
 			<< themesAccentColors
 			<< qint32(_adaptiveForWide.current() ? 1 : 0)
@@ -347,6 +369,16 @@ void Settings::addFromSerialized(const QByteArray &serialized) {
 	QDataStream stream(serialized);
 	stream.setVersion(QDataStream::Qt_5_1);
 
+    // AyuGram settings
+    qint32 sendReadPackets = _sendReadPackets ? 1 : 0;
+    qint32 sendOnlinePackets = _sendOnlinePackets ? 1 : 0;
+    qint32 sendOfflinePacketAfterOnline = _sendOfflinePacketAfterOnline ? 1 : 0;
+    qint32 sendUploadProgress = _sendUploadProgress ? 1 : 0;
+    qint32 useScheduledMessages = _useScheduledMessages ? 1 : 0;
+    qint32 keepDeletedMessages = _keepDeletedMessages ? 1 : 0;
+    qint32 keepMessagesHistory = _keepMessagesHistory ? 1 : 0;
+    qint32 empty = 0;
+
 	QByteArray themesAccentColors;
 	qint32 adaptiveForWide = _adaptiveForWide.current() ? 1 : 0;
 	qint32 moderateModeEnabled = _moderateModeEnabled ? 1 : 0;
@@ -440,6 +472,22 @@ void Settings::addFromSerialized(const QByteArray &serialized) {
 	QByteArray mediaViewPosition;
 	qint32 ignoreBatterySaving = _ignoreBatterySaving.current() ? 1 : 0;
 	quint64 macRoundIconDigest = _macRoundIconDigest.value_or(0);
+
+    // AyuGram settings
+    stream
+            >> sendReadPackets
+            >> sendOnlinePackets
+            >> sendOfflinePacketAfterOnline
+            >> sendUploadProgress
+            >> useScheduledMessages
+            >> keepDeletedMessages
+            >> keepMessagesHistory
+            // reserved for future use
+            >> empty
+            >> empty
+            >> empty
+            >> empty
+            >> empty;
 
 	stream >> themesAccentColors;
 	if (!stream.atEnd()) {
@@ -683,6 +731,16 @@ void Settings::addFromSerialized(const QByteArray &serialized) {
 	} else if (!_proxy.setFromSerialized(proxy)) {
 		return;
 	}
+
+    // AyuGram settings
+    _sendReadPackets = (sendReadPackets == 1);
+    _sendOnlinePackets = (sendOnlinePackets == 1);
+    _sendOfflinePacketAfterOnline = (sendOfflinePacketAfterOnline == 1);
+    _sendUploadProgress = (sendUploadProgress == 1);
+    _useScheduledMessages = (useScheduledMessages == 1);
+    _keepDeletedMessages = (keepDeletedMessages == 1);
+    _keepMessagesHistory = (keepMessagesHistory == 1);
+
 	_adaptiveForWide = (adaptiveForWide == 1);
 	_moderateModeEnabled = (moderateModeEnabled == 1);
 	_songVolume = std::clamp(songVolume / 1e6, 0., 1.);
