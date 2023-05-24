@@ -1,9 +1,9 @@
-#define MyAppShortName "64Gram"
-#define MyAppName "64Gram Desktop"
-#define MyAppPublisher "64Gram"
-#define MyAppURL "https://github.com/TDesktop-x64"
+#define MyAppShortName "AyuGram"
+#define MyAppName "AyuGram Desktop"
+#define MyAppPublisher "AyuGram"
+#define MyAppURL "https://github.com/AyuGram"
 #define MyAppExeName "Telegram.exe"
-#define MyAppId "9DB6C981-7FD2-41B5-AEF2-20C933FD3F21"
+#define MyAppId "53F49750-6209-4FBF-9CA8-7A333C87D666"
 #define CurrentYear GetDateTimeString('yyyy','','')
 
 [Setup]
@@ -37,11 +37,11 @@ DisableProgramGroupPage=no
 #if MyBuildTarget == "win64"
   ArchitecturesAllowed="x64 arm64"
   ArchitecturesInstallIn64BitMode="x64 arm64"
-  OutputBaseFilename=64Gram-setup-x64.{#MyAppVersionFull}
+  OutputBaseFilename=AyuGram-setup-x64.{#MyAppVersionFull}
   #define ArchModulesFolder "x64"
   AppVerName={#MyAppName} {#MyAppVersion} 64bit
 #else
-  OutputBaseFilename=64Gram-setup.{#MyAppVersionFull}
+  OutputBaseFilename=AyuGram-setup.{#MyAppVersionFull}
   #define ArchModulesFolder "x86"
   AppVerName={#MyAppName} {#MyAppVersion} 32bit
 #endif

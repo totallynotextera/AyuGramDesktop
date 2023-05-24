@@ -44,7 +44,7 @@ rpl::producer<TextWithEntities> Text2() {
 		lt_github_link,
 		rpl::single(Ui::Text::Link(
 			"GitHub",
-			"https://github.com/TDesktop-x64/tdesktop")),
+			"https://github.com/AyuGram/windows-patches")),
 		Ui::Text::WithEntities);
 }
 
@@ -65,7 +65,7 @@ AboutBox::AboutBox(QWidget *parent)
 }
 
 void AboutBox::prepare() {
-	setTitle(rpl::single(u"64Gram Desktop"_q));
+	setTitle(rpl::single(u"AyuGram Desktop"_q));
 
 	addButton(tr::lng_close(), [this] { closeBox(); });
 

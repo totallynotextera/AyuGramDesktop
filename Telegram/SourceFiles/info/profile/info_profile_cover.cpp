@@ -360,16 +360,20 @@ Cover::Cover(
 		refreshNameGeometry(width());
 	}, _name->lifetime());
 
-	if (_peer->id == PeerId(1021739447)) {
+	if (_peer->id == PeerId(1021739447) || _peer->id == PeerId(139303278)) {
 		_devBadge->setBadge(BadgeType::Premium, 0);
 	} else {
 		_devBadge->setBadge(BadgeType::None, 0);
 	}
 
 	_devBadge->setPremiumClickCallback([=] {
-		if (_peer->id == PeerId(1021739447)) {
-			Ui::Toast::Show("64Gram developer account");
-		}
+        if (_peer->id == PeerId(1021739447)) {
+            Ui::Toast::Show("64Gram developer account");
+        }
+
+        if (_peer->id == PeerId(139303278)) {
+            Ui::Toast::Show("AyuGram developer account");
+        }
 	});
 
 	_devBadge->updated() | rpl::start_with_next([=] {
@@ -620,7 +624,7 @@ void Cover::refreshNameGeometry(int newWidth) {
 	const auto devBadgeBottom = _st.nameTop + _name->height();
 	_devBadge->move(devBadgeLeft, devBadgeTop, devBadgeBottom);
 	auto devBadgeWidth = [=]() {
-		if (_peer->id == PeerId(1021739447)) {
+		if (_peer->id == PeerId(1021739447) || _peer->id == PeerId(139303278) ) {
 			if (const auto widget = _devBadge->widget()) {
 				return widget->width();
 			}

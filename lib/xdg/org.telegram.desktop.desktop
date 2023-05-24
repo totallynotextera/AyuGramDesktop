@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=64Gram Desktop
+Name=AyuGram Desktop
 Comment=Unofficial desktop version of Telegram messaging app
 TryExec=telegram-desktop
 Exec=telegram-desktop -- %u
 Icon=telegram
 Terminal=false
-StartupWMClass=64Gram
+StartupWMClass=AyuGram
 Type=Application
 Categories=Chat;Network;InstantMessaging;Qt;
 MimeType=x-scheme-handler/tg;

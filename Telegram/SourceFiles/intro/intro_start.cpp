@@ -15,6 +15,13 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "main/main_account.h"
 #include "main/main_app_config.h"
 
+
+// AyuGram includes
+#include "core/application.h"
+#include "core/core_settings.h"
+#include "window/themes/window_theme.h"
+
+
 namespace Intro {
 namespace details {
 
@@ -23,8 +30,11 @@ StartWidget::StartWidget(
 	not_null<Main::Account*> account,
 	not_null<Data*> data)
 : Step(parent, account, data, true) {
+    Window::Theme::Background()->reapplyWithNightMode(":/gui/day-blue.tdesktop-theme", Core::App().settings().systemDarkModeEnabled());
+    Window::Theme::KeepApplied();
+
 	setMouseTracking(true);
-	setTitleText(rpl::single(u"64Gram Desktop"_q));
+	setTitleText(rpl::single(u"AyuGram Desktop"_q));
 	setDescriptionText(tr::lng_intro_about2());
 	show();
 }
