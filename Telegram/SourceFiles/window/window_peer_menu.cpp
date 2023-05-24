@@ -103,6 +103,11 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <api/api_text_entities.h>
 #include <history/view/history_view_pinned_section.h>
 
+
+// AyuGram includes
+#include "history/history_unread_things.h"
+
+
 namespace Window {
 namespace {
 
@@ -1368,6 +1373,11 @@ void Filler::fillArchiveActions() {
 }
 
 } // namespace
+
+// I hate C++ actually
+void MarkAsReadChatListHack(not_null<Dialogs::MainList*> list) {
+    MarkAsReadChatList(list);
+}
 
 void PeerMenuHidePinnedMessage(not_null<PeerData*> peer) {
 	auto hidden = HistoryWidget::switchPinnedHidden(peer, true);
@@ -2718,12 +2728,69 @@ bool FillVideoChatMenu(
 }
 
 bool IsUnreadThread(not_null<Data::Thread*> thread) {
-	return thread->chatListBadgesState().unread;
+	return thread->chatListBadgesState().unread || thread->unreadMentions().has() || thread->unreadReactions().has();
 }
 
 void MarkAsReadThread(not_null<Data::Thread*> thread) {
+    // shamefully copied from "menu_send.cpp"
+    const auto processMentions = [=](
+            base::weak_ptr<Data::Thread> weakThread,
+            auto resend) -> void {
+        const auto thread = weakThread.get();
+        if (!thread) {
+            return;
+        }
+        const auto peer = thread->peer();
+        const auto topic = thread->asTopic();
+        const auto rootId = topic ? topic->rootId() : 0;
+        using Flag = MTPmessages_ReadMentions::Flag;
+        peer->session().api().request(MTPmessages_ReadMentions(
+                MTP_flags(rootId ? Flag::f_top_msg_id : Flag()),
+                peer->input,
+                MTP_int(rootId)
+        )).done([=](const MTPmessages_AffectedHistory &result) {
+            const auto offset = peer->session().api().applyAffectedHistory(
+                    peer,
+                    result);
+            if (offset > 0) {
+                resend(weakThread, resend);
+            } else {
+                peer->owner().history(peer)->clearUnreadMentionsFor(rootId);
+            }
+        }).send();
+    };
+
+    const auto processReactions = [=](
+            base::weak_ptr<Data::Thread> weakThread,
+            auto resend) -> void {
+        const auto thread = weakThread.get();
+        if (!thread) {
+            return;
+        }
+        const auto topic = thread->asTopic();
+        const auto peer = thread->peer();
+        const auto rootId = topic ? topic->rootId() : 0;
+        using Flag = MTPmessages_ReadReactions::Flag;
+        peer->session().api().request(MTPmessages_ReadReactions(
+                MTP_flags(rootId ? Flag::f_top_msg_id : Flag(0)),
+                peer->input,
+                MTP_int(rootId)
+        )).done([=](const MTPmessages_AffectedHistory &result) {
+            const auto offset = peer->session().api().applyAffectedHistory(
+                    peer,
+                    result);
+            if (offset > 0) {
+                resend(weakThread, resend);
+            } else {
+                peer->owner().history(peer)->clearUnreadReactionsFor(rootId);
+            }
+        }).send();
+    };
+
 	const auto readHistory = [&](not_null<History*> history) {
 		history->owner().histories().readInbox(history);
+        processMentions(base::make_weak(thread), processMentions);
+        processReactions(base::make_weak(thread), processReactions);
 	};
 	if (!IsUnreadThread(thread)) {
 		return;

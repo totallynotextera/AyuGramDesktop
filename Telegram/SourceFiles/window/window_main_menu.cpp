@@ -76,6 +76,12 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtGui/QGuiApplication>
 #include <QtGui/QClipboard>
 
+
+// AyuGram includes
+#include "history/history.h"
+#include "data/data_histories.h"
+
+
 namespace Window {
 namespace {
 
@@ -459,8 +465,8 @@ MainMenu::MainMenu(
 	parentResized();
 
 	_telegram->setMarkedText(Ui::Text::Link(
-		u"64Gram Desktop"_q,
-		u"https://github.com/TDesktop-x64/tdesktop"_q));
+            u"AyuGram Desktop"_q,
+            u"https://radolyn.com"_q));
 	_telegram->setLinksTrusted();
 	_version->setMarkedText(
 		Ui::Text::Link(
@@ -766,6 +772,32 @@ void MainMenu::setupMenu() {
 		)->setClickedCallback([=] {
 			controller->showPeerHistory(controller->session().user());
 		});
+        addAction(
+                rpl::single(QString("LRead Messages")),
+                { &st::settingsIconForward, kIconPurple }
+        )->setClickedCallback([=] {
+            const auto settings = &Core::App().settings();
+            const auto prev = settings->sendReadPackets();
+            settings->setSendReadPackets(false);
+
+            auto chats = controller->session().data().chatsList();
+            MarkAsReadChatListHack(chats);
+
+            settings->setSendReadPackets(prev);
+        });
+        addAction(
+                rpl::single(QString("SRead Messages")),
+                { &st::settingsIconForward, kIconPurple }
+        )->setClickedCallback([=] {
+            const auto settings = &Core::App().settings();
+            const auto prev = settings->sendReadPackets();
+            settings->setSendReadPackets(true);
+
+            auto chats = controller->session().data().chatsList();
+            MarkAsReadChatListHack(chats);
+
+            settings->setSendReadPackets(prev);
+        });
 	} else {
 		addAction(
 			tr::lng_profile_add_contact(),
