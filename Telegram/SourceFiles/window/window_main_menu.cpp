@@ -779,12 +779,12 @@ void MainMenu::setupMenu() {
         )->setClickedCallback([=] {
             auto settings = &AyuSettings::getInstance();
             auto prev = settings->sendReadPackets;
-            settings->sendReadPackets = false;
+            settings->set_sendReadPackets(false);
 
             auto chats = controller->session().data().chatsList();
             MarkAsReadChatListHack(chats);
 
-            settings->sendReadPackets = prev;
+            settings->set_sendReadPackets(prev);
         });
         addAction(
                 rpl::single(QString("SRead Messages")),
@@ -792,12 +792,12 @@ void MainMenu::setupMenu() {
         )->setClickedCallback([=] {
             auto settings = &AyuSettings::getInstance();
             auto prev = settings->sendReadPackets;
-            settings->sendReadPackets = true;
+            settings->set_sendReadPackets(true);
 
             auto chats = controller->session().data().chatsList();
             MarkAsReadChatListHack(chats);
 
-            settings->sendReadPackets = prev;
+            settings->set_sendReadPackets(prev);
         });
 	} else {
 		addAction(
