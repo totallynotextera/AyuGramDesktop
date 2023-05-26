@@ -2806,6 +2806,7 @@ void MarkAsReadThread(not_null<Data::Thread*> thread) {
 		}
 	} else if (const auto topic = thread->asTopic()) {
 		topic->readTillEnd();
+        readHistory(topic->history());
 	}
 }
 

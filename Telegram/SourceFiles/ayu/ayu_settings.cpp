@@ -1,7 +1,7 @@
 #include "ayu_settings.h"
 
 namespace AyuSettings {
-    const QString filename = "ayu_settings.json";
+    const QString filename = "tdata/ayu_settings.json";
     const int latestMigration = 1;
     AyuGramSettings settings;
 
