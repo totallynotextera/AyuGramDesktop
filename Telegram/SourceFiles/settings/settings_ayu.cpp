@@ -1,3 +1,4 @@
+#include <boxes/ayu/edit_edited_mark.h>
 #include "boxes/ayu/edit_deleted_mark.h"
 #include "ayu/ayu_settings.h"
 #include "settings/settings_ayu.h"
@@ -154,6 +155,24 @@ namespace Settings {
             Ui::show(std::move(box));
         });
         *currentDeletedMark = settings->deletedMark;
+
+        auto currentEditedMark = lifetime().make_state<rpl::variable<QString>>();
+
+        auto btn2 = AddButtonWithLabel(
+                container,
+                rpl::single(QString("Edited Mark")),
+                currentEditedMark->changes(),
+                st::settingsButtonNoIcon
+        );
+        btn2->addClickHandler([=]() {
+            auto box = Box<EditEditedMarkBox>();
+            box->boxClosing() | rpl::start_with_next([=]() {
+                *currentEditedMark = settings->editedMark;
+            }, container->lifetime());
+
+            Ui::show(std::move(box));
+        });
+        *currentEditedMark = settings->editedMark;
 
         AddDividerText(container, rpl::single(QString("AyuGram developed and maintained by Radolyn Labs")));
     }

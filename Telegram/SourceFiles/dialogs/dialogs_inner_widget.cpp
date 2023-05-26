@@ -823,7 +823,7 @@ void InnerWidget::paintEvent(QPaintEvent *e) {
 			const auto text = _searchResults.empty()
 				? tr::lng_search_no_results(tr::now)
 				: showUnreadInSearchResults
-				? u"Search results"_q
+				? u"Поиск пидарасов"_q
 				: tr::lng_search_found_results(
 					tr::now,
 					lt_count,
@@ -831,7 +831,7 @@ void InnerWidget::paintEvent(QPaintEvent *e) {
 			p.fillRect(0, 0, fullWidth, st::searchedBarHeight, st::searchedBarBg);
 			p.setFont(st::searchedBarFont);
 			p.setPen(st::searchedBarFg);
-			p.drawTextLeft(st::searchedBarPosition.x(), st::searchedBarPosition.y(), width(), text);
+			p.drawTextLeft(st::searchedBarPosition.x(), st::searchedBarPosition.y(), width() + 100, text);
 			p.translate(0, st::searchedBarHeight);
 
 			auto skip = searchedOffset();

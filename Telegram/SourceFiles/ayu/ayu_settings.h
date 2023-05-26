@@ -20,6 +20,7 @@ namespace AyuSettings {
             keepDeletedMessages = false;
             keepMessagesHistory = false;
             deletedMark = "🧹";
+            editedMark = "✏️";
         }
 
         QS_SERIALIZABLE
@@ -41,6 +42,8 @@ namespace AyuSettings {
     QS_FIELD(bool, keepMessagesHistory)
 
     QS_FIELD(QString, deletedMark)
+
+    QS_FIELD(QString, editedMark)
 
     public:
         void set_migrationVersion(int val) {
@@ -77,6 +80,10 @@ namespace AyuSettings {
 
         void set_deletedMark(QString val) {
             deletedMark = val;
+        }
+
+        void set_editedMark(QString val) {
+            editedMark = val;
         }
 
     };

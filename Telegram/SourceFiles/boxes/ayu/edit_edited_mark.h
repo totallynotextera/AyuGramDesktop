@@ -4,9 +4,9 @@
 #include "base/timer.h"
 #include "mtproto/sender.h"
 
-class EditDeletedMarkBox : public Ui::BoxContent {
+class EditEditedMarkBox : public Ui::BoxContent {
 public:
-    EditDeletedMarkBox(QWidget*);
+    EditEditedMarkBox(QWidget*);
 
 protected:
     void setInnerFocus() override;

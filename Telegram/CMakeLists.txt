@@ -102,6 +102,8 @@ PRIVATE
     settings/settings_ayu.h
     boxes/ayu/edit_deleted_mark.cpp
     boxes/ayu/edit_deleted_mark.h
+    boxes/ayu/edit_edited_mark.cpp
+    boxes/ayu/edit_edited_mark.h
 
     api/api_attached_stickers.cpp
     api/api_attached_stickers.h
