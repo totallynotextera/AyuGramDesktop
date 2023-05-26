@@ -30,12 +30,15 @@ EditDeletedMarkBox::EditDeletedMarkBox(QWidget *) :
 }
 
 void EditDeletedMarkBox::prepare() {
+    const auto defaultDeletedMark = "🧹";
     auto newHeight = st::contactPadding.top() + _text->height();
 
     setTitle(rpl::single(QString("Edit Deleted Mark")));
 
     newHeight += st::boxPadding.bottom() + st::contactPadding.bottom();
     setDimensions(st::boxWidth, newHeight);
+
+    addLeftButton(rpl::single(QString("Reset")), [=] { _text->setText(defaultDeletedMark); });
 
     addButton(tr::lng_settings_save(), [=] { save(); });
     addButton(tr::lng_cancel(), [=] { closeBox(); });

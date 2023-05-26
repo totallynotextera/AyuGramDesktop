@@ -33,6 +33,7 @@ EditEditedMarkBox::EditEditedMarkBox(QWidget *) :
 
 
 void EditEditedMarkBox::prepare() {
+    const auto defaultEditedMark = "✏️";
     auto newHeight = st::contactPadding.top() + _text->height();
 
     setTitle(rpl::single(QString("Edit edited Mark")));
@@ -40,6 +41,7 @@ void EditEditedMarkBox::prepare() {
     newHeight += st::boxPadding.bottom() + st::contactPadding.bottom();
     setDimensions(st::boxWidth, newHeight);
 
+    addLeftButton(rpl::single(QString("Reset")), [=] { _text->setText(defaultEditedMark); });
     addButton(tr::lng_settings_save(), [=] { save(); });
     addButton(tr::lng_cancel(), [=] { closeBox(); });
 
