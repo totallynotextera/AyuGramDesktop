@@ -335,7 +335,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_phone_to_qr" = "Quick log in using QR code";
 "lng_country_code" = "Country Code";
 "lng_bad_country_code" = "Invalid Country Code";
-"lng_country_ph" = "Поиск пидарасов";
+"lng_country_ph" = "Search";
 "lng_country_none" = "Country not found";
 "lng_country_select" = "Select country";
 
@@ -382,7 +382,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_signup_firstname" = "First Name";
 "lng_signup_lastname" = "Last Name";
 
-"lng_dlg_filter" = "Поиск пидарасов";
+"lng_dlg_filter" = "Search";
 "lng_dlg_new_group_name" = "Group name";
 "lng_dlg_new_channel_name" = "Channel name";
 "lng_dlg_new_bot_name" = "Bot name";
@@ -391,9 +391,9 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_contacts_loading" = "Loading...";
 "lng_contacts_not_found" = "No contacts found";
 "lng_topics_not_found" = "No topics found.";
-"lng_dlg_search_for_messages" = "---Search for messages";
+"lng_dlg_search_for_messages" = "Search for messages";
 "lng_update_telegram" = "Update Telegram";
-"lng_dlg_search_in" = "---Search messages in";
+"lng_dlg_search_in" = "Search messages in";
 "lng_dlg_search_from" = "From: {user}";
 
 "lng_settings_save" = "Save";
@@ -1376,7 +1376,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_channel_removed_list_about" = "Users removed from the channel by admins cannot rejoin it via invite links.";
 "lng_group_removed_list_about" = "Users removed from the group by admins cannot rejoin it via invite links.";
 
-"lng_participant_filter" = "Поиск участника";
+"lng_participant_filter" = "Search";
 "lng_participant_invite" = "Invite";
 "lng_participant_invite_history" = "Show the last 100 messages";
 "lng_participant_invite_sure" = "Are you sure you want to add **{user}** to **{group}**?";
@@ -1917,7 +1917,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 "lng_stickers_featured_add" = "Add";
 "lng_emoji_featured_unlock" = "Unlock";
 "lng_emoji_premium_restore" = "Restore";
-"lng_gifs_search" = "Поиск очередной всратой гифки";
+"lng_gifs_search" = "Search GIFs";
 "lng_gifs_no_saved" = "You have no saved GIFs yet.";
 
 "lng_inline_bot_no_results" = "No results.";
