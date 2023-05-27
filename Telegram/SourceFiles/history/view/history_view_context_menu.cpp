@@ -220,9 +220,16 @@ void AddSaveDocumentAction(
 		HistoryItem *item,
 		not_null<DocumentData*> document,
 		not_null<ListWidget*> list) {
+
 	if (list->hasCopyMediaRestriction(item)) {
 		return;
 	}
+
+//    menu->addAction(
+//            QString("History"),
+//            [=](){},
+//            &st::menuIconDownload);
+
 	const auto origin = item ? item->fullId() : FullMsgId();
 	const auto save = [=] {
 		DocumentSaveClickHandler::SaveAndTrack(
@@ -1124,6 +1131,24 @@ void AddSelectionAction(
 	if (!AddClearSelectionAction(menu, request, list)) {
 		AddSelectMessageAction(menu, request, list);
 	}
+}
+
+bool AddHistoryAction(
+        not_null<Ui::PopupMenu*> menu,
+        const ContextMenuRequest &request,
+        not_null<ListWidget*> list) {
+
+    const auto item = request.item;
+
+    const auto owner = &item->history()->owner();
+    const auto controller = list->controller();
+    const auto itemId = item->fullId();
+
+    const auto callback = [=]{};
+
+    menu->addAction(QString("History"), callback, &st::menuIconReport);
+
+    return true;
 }
 
 void AddTopMessageActions(

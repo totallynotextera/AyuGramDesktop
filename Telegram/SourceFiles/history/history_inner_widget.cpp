@@ -113,6 +113,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include <QtWidgets/QApplication>
 #include <QtCore/QMimeData>
 #include <api/api_sending.h>
+#include <boxes/ayu/view_message_history.h>
 
 namespace {
 
@@ -2253,7 +2254,9 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 				_widget->editMessage(editItemId);
 			}, &st::menuIconEdit);
 		}
-		const auto pinItem = (item->canPin() && item->isPinned())
+
+
+        const auto pinItem = (item->canPin() && item->isPinned())
 			? item
 			: groupLeaderOrSelf(item);
 		if (pinItem->canPin()) {
@@ -2264,6 +2267,14 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 				Window::ToggleMessagePinned(controller, pinItemId, !isPinned);
 			}), isPinned ? &st::menuIconUnpin : &st::menuIconPin);
 		}
+
+        // ayu history action
+        _menu->addAction(QString("History"), [=]{
+            auto box = Box<MessageHistoryBox>();
+            Ui::show(std::move(box));
+
+        }, &st::menuIconReport);
+
 		const auto peer = item->history()->peer;
 		if (peer->isChat() || peer->isMegagroup()) {
 			const auto msgSigned = pinItem->mainView()->data()->Get<HistoryMessageSigned>();
@@ -2297,6 +2308,7 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 			}, &st::menuIconStickers);
 		}
 	};
+
 	const auto addDocumentActions = [&](not_null<DocumentData*> document, HistoryItem *item) {
 		if (document->loading()) {
 			_menu->addAction(tr::lng_context_cancel_download(tr::now), [=] {
@@ -2351,7 +2363,7 @@ void HistoryInner::showContextMenu(QContextMenuEvent *e, bool showFromTouch) {
 		}
 	};
 
-	const auto addSelectMessageAction = [&](
+    const auto addSelectMessageAction = [&](
 			not_null<HistoryItem*> item,
 			bool asGroup = true) {
 		if (item->isRegular()

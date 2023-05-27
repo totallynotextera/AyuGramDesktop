@@ -198,6 +198,7 @@ const PollAnswer *PollData::answerByOption(const QByteArray &option) const {
 bool PollData::applyResultToAnswers(
 		const MTPPollAnswerVoters &result,
 		bool isMinResults) {
+
 	return result.match([&](const MTPDpollAnswerVoters &voters) {
 		const auto &option = voters.voption().v;
 		const auto answer = answerByOption(option);

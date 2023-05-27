@@ -104,6 +104,8 @@ PRIVATE
     boxes/ayu/edit_deleted_mark.h
     boxes/ayu/edit_edited_mark.cpp
     boxes/ayu/edit_edited_mark.h
+    boxes/ayu/view_message_history.cpp
+    boxes/ayu/view_message_history.h
 
     api/api_attached_stickers.cpp
     api/api_attached_stickers.h
